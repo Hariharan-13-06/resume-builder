@@ -4,7 +4,9 @@ import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import hari from '../images/hari.jpg';
 
-const Header = () => {
+const Header = ({ exportPDF }) => {
+
+   
     return (
         <Container>
             <Link to="/"><Logo>
@@ -17,6 +19,7 @@ const Header = () => {
                 <p>Insert</p>
                 <p>Format</p>
                 <p>Tools</p>
+                <p onClick={exportPDF}>Download Resume</p>
             </Menu>
             <RightOptions>
                 <Desc>

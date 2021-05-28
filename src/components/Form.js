@@ -101,6 +101,7 @@ const Form = () => {
             hobbies: hobbies
         }
         addResume(newResume);
+        window.confirm('Your Resume is now created. Now preview your resume and download.');
     }
 
     return (
@@ -377,7 +378,7 @@ const Build = styled.div`
     p {
         width: 200px;
         height: 50px;
-        background-color: #f7fd04;
+        background: linear-gradient(to right, palegreen, #f7fd04);
         color: black;
         font-weight: 500;
         font-size: larger;
@@ -399,5 +400,6 @@ const Build = styled.div`
         padding-top: 10px;
         cursor: pointer;
         border: 3px solid #FF0000;
+        background: linear-gradient(to right, red, orange);
     }
 `

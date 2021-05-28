@@ -4,94 +4,98 @@ import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import PhoneAndroidIcon from '@material-ui/icons/PhoneAndroid';
 import EmailIcon from '@material-ui/icons/Email';
 import styled from 'styled-components';
+import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
 import { GlobalContext } from '../context/GlobalState';
 
-const Body = () => {
+const Body = ({ pdfExport }) => {
     const { resume } = useContext(GlobalContext);
 
-    console.log(resume)
+    const pdfExportComponent = React.useRef(null);
 
     return (
         <Container>
-            <About>
-                <Profile src={resume.about.img} />
-                <Details>
-                    <h4>{resume.about.name}</h4>
-                    <p>{resume.about.objective}</p>
-                </Details>
-            </About>
-            <Contact>
-                <Item>
-                    <h6><PhoneAndroidIcon /></h6>
-                    <p>{resume.contact.phoneNo}</p>
-                </Item>
-                <Item>
-                    <h6><EmailIcon /></h6>
-                    <p>{resume.contact.email}</p>
-                </Item>
-                <Item>
-                    <h6><LinkedInIcon /></h6>
-                    <p>{resume.contact.linkedin}</p>
-                </Item>
-                <Item>
-                    <h6><GitHubIcon /></h6>
-                    <p>{resume.contact.github}</p>
-                </Item>
-            </Contact>
-            <Skills>
-                <p>Skills</p>
-                <Skill>
-                    {
-                        resume.skills.map(skill => <h6>{skill}</h6>)
-                    }
-                </Skill>
-            </Skills>
-            <WorkExp>
-                <h6>Work Experience</h6>
-                <Exp>
-                    {
-                        resume.workExp.map(({role, company, date, location, workDetail}) => (
-                            <>
-                                <Role>{role}</Role>
-                                <Company>{company}</Company>
-                                <Duration>
-                                    <Date>{date}</Date>
-                                    <Location>{location}</Location>
-                                </Duration>
-                                {
-                                    workDetail.split(',').map(work => <Work>{work}</Work>)
-                                }
+            <PDFExport ref={pdfExport} paperSize="A4">
+                <About>
+                    <Profile src={resume.about.img} />
+                    <Details>
+                        <h4>{resume.about.name}</h4>
+                        <p>{resume.about.objective}</p>
+                    </Details>
+                </About>
+                <Contact>
+                    <Item>
+                        <h6><PhoneAndroidIcon /></h6>
+                        <p>{resume.contact.phoneNo}</p>
+                    </Item>
+                    <Item>
+                        <h6><EmailIcon /></h6>
+                        <p>{resume.contact.email}</p>
+                    </Item>
+                    <Item>
+                        <h6><LinkedInIcon /></h6>
+                        <p>{resume.contact.linkedin}</p>
+                    </Item>
+                    <Item>
+                        <h6><GitHubIcon /></h6>
+                        <p>{resume.contact.github}</p>
+                    </Item>
+                </Contact>
+                <Skills>
+                    <p>Skills</p>
+                    <Skill>
+                        {
+                            resume.skills.map(skill => <h6>{skill}</h6>)
+                        }
+                    </Skill>
+                </Skills>
+                <WorkExp>
+                    <h6>Work Experience</h6>
+                    <Exp>
+                        {
+                            resume.workExp.map(({role, company, date, location, workDetail}) => (
+                                <>
+                                    <Role>{role}</Role>
+                                    <Company>{company}</Company>
+                                    <Duration>
+                                        <Date>{date}</Date>
+                                        <Location>{location}</Location>
+                                    </Duration>
+                                    {
+                                        workDetail.split(',').map(work => <Work>{`-> ${work}`}</Work>)
+                                    }
 
-                            </>
-                        ))
-                    }
-                </Exp>
-            </WorkExp>
-            <Education>
-                <h6>Education</h6>
-                <Edu>
-                    {
-                        resume.education.map(({school, grade, year, mark}) => (
-                            <>
-                                <Grade>{grade}</Grade>
-                                <School>{school}</School>
-                                <Data>
-                                    <p>{year}</p>
-                                    <p>Mark : <span>{mark}</span></p>
-                                </Data>
-                            </>
-                        ))
-                    }
-                </Edu>
-            </Education>
-            <Hobbies>
-                <h6>Hobbies</h6>
-                <Hobby>
-                    {
-                        resume.hobbies.map(h => <p>{h}</p>)
-                    }
-                </Hobby>
-            </Hobbies>
+                                </>
+                            ))
+                        }
+                    </Exp>
+                </WorkExp>
+                <Education>
+                    <h6>Education</h6>
+                    <Edu>
+                        {
+                            resume.education.map(({school, grade, year, mark}) => (
+                                <>
+                                    <Grade>{grade}</Grade>
+                                    <School>{school}</School>
+                                    <Data>
+                                        <p>{year}</p>
+                                        <p>Mark : <span>{mark}</span></p>
+                                    </Data>
+                                </>
+                            ))
+                        }
+                    </Edu>
+                </Education>
+                <Hobbies>
+                    <h6>Hobbies</h6>
+                    <Hobby>
+                        {
+                            resume.hobbies.map(h => <p>{h}</p>)
+                        }
+                    </Hobby>
+                </Hobbies>
+            </PDFExport>
+            
         </Container>
     )
 }
@@ -111,7 +115,7 @@ const Container = styled.div`
 `
 
 const About = styled.div`
-    margin-top: 10px;
+    margin-top: 5px;
     padding: 5px;
     display: flex;
     flex-direction: row;
@@ -119,13 +123,14 @@ const About = styled.div`
 `
 
 const Profile = styled.img`
-    height: 200px;
-    width: 200px;
+    height: 120px;
+    width: 120px;
     object-fit: contain;
 `
 const Details = styled.div`
+    margin-left: 5px;
     h4 {
-        font-size: x-large;
+        font-size: medium;
         font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     }
 `
@@ -146,19 +151,21 @@ const Item = styled.div`
     p {
         margin-left: 2px;
         font-weight: 500;
+        font-size: small;
     }
 
     h6 {
         color: #0061a8;
+        font-size: small;
     }
 `
 const Skills = styled.div`
-    margin: 10px 0;
+    margin: 5x 0;
     padding: 5px 10px;
     width: 595px;
     border-bottom: 3px solid #0061a8;
     p {
-        font-size: larger;
+        font-size: small;
         font-weight: 500;
         color: #0061a8;
     }
@@ -172,17 +179,17 @@ const Skill = styled.div`
         padding: 5px;
         background-color: #ccffbd;
         border-radius: 5px;
-        margin: 3px 10px;
-        font-size: 14px;
+        margin: 3px 7px;
+        font-size: small;
     }
 `
 const WorkExp = styled.div`
-    margin: 10px 0;
+    margin: 5px 0;
     padding: 5px 10px;
     border-bottom: 3px solid #0061a8;
     width: 595px;
     h6 {
-        font-size: larger;
+        font-size: small;
         font-weight: 500;
         color: #4a47a3;
     }
@@ -190,15 +197,16 @@ const WorkExp = styled.div`
 const Exp = styled.div`
     display: flex;
     flex-direction: column;
-    margin-bottom: 18px;
+    margin-bottom: 5px;
 
 `  
 const Role = styled.p`
-    font-size: large;
+    font-size: small;
     font-weight: 600;
 `
 const Company = styled.p`
     color: black;
+    font-size: small;
     font-weight: 400;
 `
 const Duration = styled.div`
@@ -214,16 +222,17 @@ const Duration = styled.div`
 const Date = styled.p``
 const Location = styled.p``
 
-const Work = styled.li`
-    margin-bottom: 15px;
+const Work = styled.p`
+    margin-bottom: 5px;
+    font-size: small;
 `
 const Education = styled.div`
     width: 595px;
-    margin: 10px 0;
+    margin: 5px 0;
     padding: 5px 10px;
     border-bottom: 3px solid #0061a8;
     h6 {
-        font-size: larger;
+        font-size: small;
         font-weight: 500;
         color: #4a47a3;
     }
@@ -231,10 +240,15 @@ const Education = styled.div`
 const Edu = styled.div`
     display: flex;
     flex-direction: column;
-    margin-bottom: 18px;
+    margin-bottom: 5px;
 `
-const Grade = styled.p``
-const School = styled.p``
+const Grade = styled.p`
+    font-size: small;
+`
+const School = styled.p`
+    
+    font-size: small;
+`
 const Data = styled.div`
     color: gray;
     font-weight: 200;
@@ -243,18 +257,18 @@ const Data = styled.div`
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
     margin-right: 10px;
     span {
         font-weight: 500;
     }
 `
 const Hobbies = styled.div`
-    margin: 10px 0;
-    padding: 5px 10px;
+    margin: 5px 0;
+    padding: 2px 10px;
     width: 595px;
     h6 {
-        font-size: larger;
+        font-size: small;
         font-weight: 500;
         color: #0061a8;
     }

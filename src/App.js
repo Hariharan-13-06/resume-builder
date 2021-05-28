@@ -10,15 +10,25 @@ import Header from './components/Header';
 import './App.css';
 import Body from './components/Body';
 import Form from './components/Form';
+import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
 
 function App() {
+
+  const pdfExportComponent = React.useRef(null);
+
+    const exportPDFWithComponent = () => {
+        if (pdfExportComponent.current) {
+          pdfExportComponent.current.save();
+        }
+      };
+
   return (
     <Router>
       <Container>
         <Switch>
           <Route path="/resume">
-            <Header />
-            <Body />
+            <Header exportPDF={exportPDFWithComponent} />
+            <Body pdfExport={pdfExportComponent} />
           </Route>
           <Route path="/">
             <Header />
